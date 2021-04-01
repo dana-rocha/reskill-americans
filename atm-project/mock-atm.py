@@ -3,6 +3,8 @@
 # Created by Dana Rocha 3/31/21
 # Last updated 3/31/21
 
+from datetime import datetime
+
 name = input("What is your name? \n")
 allowedUsers = ["Seyi", "Mike", "Love"]
 allowedPW = ["passwordSeyi", "passwordMike", "passwordLove"]
@@ -12,7 +14,11 @@ if (name in allowedUsers):
     userID = allowedUsers.index(name)
 
     if (password == allowedPW[userID]):
+        currentDateTime = datetime.now()
+        formattedDateTime = currentDateTime.strftime("%m/%d/%y %H:%M:%S")
+
         print("Welcome, %s!" % name)
+        print("Last login at %s" % formattedDateTime)
         print("These are the available options:")
         print("1. Withdrawal")
         print("2. Cash Deposit")

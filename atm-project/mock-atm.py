@@ -18,22 +18,38 @@ if (name in allowedUsers):
         formattedDateTime = currentDateTime.strftime("%m/%d/%y %H:%M:%S")
 
         print("Welcome, %s!" % name)
-        print("Last login at %s" % formattedDateTime)
-        print("These are the available options:")
-        print("1. Withdrawal")
-        print("2. Cash Deposit")
-        print("3. Complaint")
+        print("Last login at %s \n" % formattedDateTime)
 
-        selectedOption = int(input("Please select an option"))
+        option = ""
 
-        if (selectedOption == 1):
-            print("You selected %s" % selectedOption)
-        elif(selectedOption == 2):
-            print("You selected %s" % selectedOption)
-        elif(selectedOption == 3):
-            print("You selected %s" % selectedOption)
-        else:
-            print("Invalid option selected, please try again.")
+        currentBalance = 0
+
+        while option != "x":
+            print("These are the available options:")
+            print("1. Withdrawal")
+            print("2. Cash Deposit")
+            print("3. Complaint")
+            print("Enter x to Log Out.")
+
+            selectedOption = input("Please select an option")
+
+            if (selectedOption == "1"):
+                withdrawInput = int(input("How much would you like to withdraw?"))
+                print("Take your cash. \n")
+                currentBalance -= withdrawInput
+                print("Your current balance is: %s \n" % currentBalance)
+            elif(selectedOption == "2"):
+                depositInput = int(input("How much would you like to deposit?"))
+                currentBalance += depositInput
+                print("Your current balance is: %s \n" % currentBalance)
+            elif(selectedOption == "3"):
+                complaintInput = input("What issue would you like to report?")
+                print("Thank you for contacting us. Your complaint will be reported. \n")
+            elif(selectedOption == "x"):
+                option = "x"
+                print("Logging out of ATM.")
+            else:
+                print("Invalid option selected, please try again.")
 
     else:
         print("Password Incorrect, please try again.")

@@ -39,10 +39,10 @@ def login():
 
                 # If everything is correct, go to bank operations
                 bankOperation(userDetails)
-
-    # If something is incorrect, break out of the loop and go back to Login
-    print("Invalid Account Number or Password")
-    login()
+            else:
+                # If something is incorrect, break out of the loop and go back to Login
+                print("Invalid Account Number or Password")
+                login()
 
 def register():
     print("**** Registration ****")
@@ -74,7 +74,7 @@ def bankOperation(user):
     elif(selectedOption == 2):
         withdrawalOperation()
     elif(selectedOption == 3):
-        login()
+        logout()
     elif(selectedOption == 4):
         exit()
     else:
@@ -89,6 +89,9 @@ def depositOperation():
 
 def generateAccountNumber():
     return random.randrange(1111111111, 9999999999)
+
+def logout():
+    login()
 
 #### ACTUAL BANKING SYSTEM ####
 init()

@@ -9,7 +9,9 @@
 # Initializing the system
 import random
 
-database = {}
+database = {
+    5154511908: ["Dana", "Rocha", "rocha.da@northeastern.edu", "password", 200]
+}
 
 def init():
 
@@ -41,13 +43,14 @@ def login():
                 # Check if account number is correct
                 if (userDetails[3] == password):
                     # Check if password is correct
-
                     # If everything is correct, go to bank operations
-                    bankOperation(userDetails)
+                    bankOperation(accountNumber, userDetails)
                 else:
                     # If something is incorrect, break out of the loop and go back to Login
                     print("Invalid Account Number or Password")
                     login()
+    else:
+        init()
 
 def account_number_validation(account_number):
     # Check if account_number is not empty
@@ -61,16 +64,16 @@ def account_number_validation(account_number):
                 int(account_number)
                 return True 
             except ValueError:
-                print("Invalid Account number. The account number should only be integers.")
+                print("Invalid Account number. The account number should only be integers. \n")
             except TypeError:
-                print("Invalid Account type.")
+                print("Invalid Account type. \n")
                 return False
 
         else:
-            print("Account number cannot be more than 10 digits")
+            print("Account number cannot be more than or less than 10 digits. \n")
             return False
     else:
-        print("Account Number is a required field")
+        print("Account Number is a required field. \n")
         return False
 
 
@@ -81,7 +84,11 @@ def register():
     last_name = input("What is your last name? \n")
     password = input("Create a password \n")
 
-    accountNumber = generateAccountNumber()
+    try:
+        accountNumber = generateAccountNumber()
+    except ValueError:
+        print("Account generation failed.")
+        init()
 
     database[accountNumber] = [first_name, last_name, email, password]
 
@@ -94,31 +101,69 @@ def register():
 
     login()
 
-def bankOperation(user):
+def bankOperation(accNum, user):
     print("Welcome %s %s" % (user[0], user[1]))
 
-    selectedOption = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout (4) Exit \n"))
+    try:
+        selectedOption = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout (4) Exit \n"))
+    
+        if (selectedOption == 1):
+            depositOperation()
+        elif(selectedOption == 2):
+            withdrawalOperation(accNum, user)
+        elif(selectedOption == 3):
+            logout()
+        elif(selectedOption == 4):
+            exit()
+        else:
+            print("Invalid option selected.")
+            bankOperation(accNum, user)
+    
+    except ValueError:
+        print("You must enter a valid option. ")
+        bankOperation(accNum, user)
 
-    if (selectedOption == 1):
-        depositOperation()
-    elif(selectedOption == 2):
-        withdrawalOperation()
-    elif(selectedOption == 3):
-        logout()
-    elif(selectedOption == 4):
-        exit()
-    else:
-        print("Invalid option selected.")
-        bankOperation(user)
+def withdrawalOperation(acctNumber, user_details):
+    print("**** Withdrawal ****")
 
-def withdrawalOperation():
-    print("withdrawal")
+    # Get current balance
+    # Get widthdrawal amount
+    # Check if current balance > withdrawal amount
+    # Deduct withdrawal amount from current balance
+    # Display current balance
+    currentBalance = user_details[4]
+
+    try:
+        withdrawalAmt = int(input("What amount would you like to withdraw? \n"))
+
+        if currentBalance > withdrawalAmt:
+            currentBalance -= withdrawalAmt
+            user_details[4] = currentBalance
+
+            # Need to actually update the database dictionary with the new account balance
+
+            print("Current Balance: %d" % user_details[4])
+        else:
+            print("Insufficient funds for withdrawal transaction.")
+            bankOperation(acctNumber, user_details)
+
+    except ValueError:
+        print("You must enter a valid number.")
+        withdrawalOperation(user_details)
 
 def depositOperation():
-    print("deposit")
+    print("**** Deposit ****")
+
+    # Get current balance
+    # Get deposit amount
+    # Add deposit amount to current balance
+    # Display current balance
 
 def generateAccountNumber():
     return random.randrange(1111111111, 9999999999)
+
+def get_current_balance(user_details):
+    return user_details[4]
 
 def logout():
     login()

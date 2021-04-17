@@ -28,21 +28,51 @@ def init():
 def login():
     print("**** Login ****")
 
-    accountNumberUser = int(input("What is your Account Number? \n"))
-    password = input("What is your password? \n")
+    accountNumberUser = input("What is your Account Number? \n")
 
-    for accountNumber, userDetails in database.items():
-        if (accountNumber == accountNumberUser):
-            # Check if account number is correct
-            if (userDetails[3] == password):
-                # Check if password is correct
+    is_valid_account_number = account_number_validation(accountNumberUser)
 
-                # If everything is correct, go to bank operations
-                bankOperation(userDetails)
-            else:
-                # If something is incorrect, break out of the loop and go back to Login
-                print("Invalid Account Number or Password")
-                login()
+    if is_valid_account_number:
+
+        password = input("What is your password? \n")
+
+        for accountNumber, userDetails in database.items():
+            if (accountNumber == int(accountNumberUser)):
+                # Check if account number is correct
+                if (userDetails[3] == password):
+                    # Check if password is correct
+
+                    # If everything is correct, go to bank operations
+                    bankOperation(userDetails)
+                else:
+                    # If something is incorrect, break out of the loop and go back to Login
+                    print("Invalid Account Number or Password")
+                    login()
+
+def account_number_validation(account_number):
+    # Check if account_number is not empty
+    # Check if account_number if 10 digits
+    # Check if account_number is an integer
+
+    if account_number:
+        if len(str(account_number)) == 10:
+
+            try: 
+                int(account_number)
+                return True 
+            except ValueError:
+                print("Invalid Account number. The account number should only be integers.")
+            except TypeError:
+                print("Invalid Account type.")
+                return False
+
+        else:
+            print("Account number cannot be more than 10 digits")
+            return False
+    else:
+        print("Account Number is a required field")
+        return False
+
 
 def register():
     print("**** Registration ****")

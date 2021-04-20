@@ -8,6 +8,7 @@
 # Bank Operations 
 # Initializing the system
 import random
+import validation
 
 database = {
     5154511908: ["Dana", "Rocha", "rocha.da@northeastern.edu", "password", 200]
@@ -32,7 +33,7 @@ def login():
 
     accountNumberUser = input("What is your Account Number? \n")
 
-    is_valid_account_number = account_number_validation(accountNumberUser)
+    is_valid_account_number = validation.account_number_validation(accountNumberUser)
 
     if is_valid_account_number:
 
@@ -52,37 +53,12 @@ def login():
     else:
         init()
 
-def account_number_validation(account_number):
-    # Check if account_number is not empty
-    # Check if account_number if 10 digits
-    # Check if account_number is an integer
-
-    if account_number:
-        if len(str(account_number)) == 10:
-
-            try: 
-                int(account_number)
-                return True 
-            except ValueError:
-                print("Invalid Account number. The account number should only be integers. \n")
-            except TypeError:
-                print("Invalid Account type. \n")
-                return False
-
-        else:
-            print("Account number cannot be more than or less than 10 digits. \n")
-            return False
-    else:
-        print("Account Number is a required field. \n")
-        return False
-
-
 def register():
     print("**** Registration ****")
     email = input("What is your email address? \n")
     first_name = input("What is your first name? \n")
     last_name = input("What is your last name? \n")
-    password = input("Create a password \n")
+    password = input("Create a password. \n")
 
     try:
         accountNumber = generateAccountNumber()

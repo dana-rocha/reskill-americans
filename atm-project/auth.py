@@ -11,9 +11,6 @@ import random
 import validation
 import database
 
-#database = {
-#    5154511908: ["Dana", "Rocha", "rocha.da@northeastern.edu", "password", 200]
-#}
 
 def init():
 
@@ -40,19 +37,19 @@ def login():
 
         password = input("What is your password? \n")
 
-        # for account_number, user_details in database.items():
-        #     if (account_number == int(account_number_user)):
-        #         # Check if account number is correct
-        #         if (user_details[3] == password):
-        #             # Check if password is correct
-        #             # If everything is correct, go to bank operations
-        #          bank_occurrences(account_number, user_details)
-        #         else:
-        #             # If something is incorrect, break out of the loop and go back to Login
-        #             print("Invalid Account Number or Password")
-        #             login()
+        for account_number, user_details in database.items():
+            if (account_number == int(account_number_user)):
+                # Check if account number is correct
+                if (user_details[3] == password):
+                    # Check if password is correct
+                    # If everything is correct, go to bank operations
+                 bank_occurrences(account_number, user_details)
+                else:
+                    # If something is incorrect, break out of the loop and go back to Login
+                    print("Invalid Account Number or Password")
+                    login()
     else:
-        print("Invalid Account Number or Password")
+        print("Account Number Invalid: Check that you have up to 10 digits.")
         init()
 
 def register():
@@ -67,7 +64,7 @@ def register():
     #database[account_number] = [first_name, last_name, email, password, balance]
     # Use the database module to create new user record
     # Create a file in the database
-    is_user_created = database.create(account_number, [first_name, last_name, email, password, 0])
+    is_user_created = database.create(account_number, first_name, last_name, email, password)
 
     # Login to account after account has been created
     if is_user_created:

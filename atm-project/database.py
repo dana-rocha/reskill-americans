@@ -4,6 +4,9 @@
 # Delete record
 # CRUD
 
+import os
+user_db_path = "data/user_record/"
+
 def create(account_number, user_details):
     print("Create a New Record")
     # Create a file
@@ -13,10 +16,13 @@ def create(account_number, user_details):
     completion_state = False
 
     try:
-        f = open("data/user_record/" + str(account_number) + ".txt", "x")
+        f = open(user_db_path + str(account_number) + ".txt", "x")
     except FileExistsError:
         # Delete the already created file, print out error, then return False
         print("User already exists.")
+
+        # Check contents of file before deleting
+        #delete(account_number)
     else:
         f.write(str(user_details))
         completion_state = True
@@ -43,9 +49,20 @@ def delete(user_account_number):
     # Find the user with account number
     # Delete the user record (file)
     # Return True
+    is_delete_successful = False
+
+    if os.path.exists(user_db_path + str(user_account_number) + ".txt"):
+        try:
+            os.remove(user_db_path + str(user_account_number) + ".txt")
+            is_delete_successful = True 
+        except FileNotFoundError:
+            print("User not found.")
+        finally:
+            return is_delete_successful
 
 def find(user_account_number):
     print("Find User")
     # Find the user with account number
 
 #create(5154511908, ["Dana", "Rocha", "rocha.da@northeastern.edu", "password", 200])
+#delete(1763801065)

@@ -9,7 +9,7 @@ import validation
 
 user_db_path = "data/user_record/"
 
-def create(account_number, first_name, last_name, email, password):
+def create(user_account_number, first_name, last_name, email, password):
     print("Create a New Record")
     # Create a file
     # Name the file with the account_number.txt in the "data" folder
@@ -18,7 +18,7 @@ def create(account_number, first_name, last_name, email, password):
     user_data = first_name + "," + last_name + "," + email + "," + password + "," + str(0)
 
 
-    if does_account_number_exist(account_number):
+    if does_account_number_exist(user_account_number):
         return False
 
     if does_email_exist(email):
@@ -28,23 +28,23 @@ def create(account_number, first_name, last_name, email, password):
     completion_state = False
 
     try:
-        f = open(user_db_path + str(account_number) + ".txt", "x")
+        f = open(user_db_path + str(User_account_number) + ".txt", "x")
 
     except FileExistsError:
         # Delete the already created file, print out error, then return False
-        does_file_contain_data = read(user_db_path + str(account_number) + ".txt")
+        does_file_contain_data = read(user_db_path + str(user_account_number) + ".txt")
 
         # Check contents of file before deleting
         # delete(account_number)
         if not does_file_contain_data:
-            delete(account_number)
+            delete(user_account_number)
     
     else:
         f.write(str(user_data))
         completion_state = True
     finally:
         f.close()
-    return completion_state
+        return completion_state
 
 def read(user_account_number):
     #print("Read User Record")
@@ -67,6 +67,8 @@ def read(user_account_number):
         print("Invalid account number format.")
     else:
         return f.readline()
+    
+    return False
 
 
 def update(user_account_number):
@@ -85,6 +87,7 @@ def delete(user_account_number):
     is_delete_successful = False
 
     if os.path.exists(user_db_path + str(user_account_number) + ".txt"):
+        
         try:
             os.remove(user_db_path + str(user_account_number) + ".txt")
             is_delete_successful = True 
@@ -121,7 +124,7 @@ def authenticate_user(account_number, password):
 
         user = str.split(read(account_number), ",")
 
-        if password == user[-1]:
+        if password == user[3]:
             return user
 
     return False

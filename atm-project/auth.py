@@ -15,13 +15,13 @@ from getpass import getpass
 
 def init():
 
-    is_valid_option = False
     print("Welcome to Bank of Python! \n")
 
     have_account = int(input("Do you have an account with us: 1 = Yes, 2 = No \n"))
-    if(have_account == 1):
+    
+    if (have_account == 1):
         login()
-    elif(have_account == 2):
+    elif (have_account == 2):
         register()
     else:
         print("You have selected an invalid option.")
@@ -43,15 +43,7 @@ def login():
 
         if user:
             bank_operations(user)
-        # for account_number, user_details in database.items():
-        #     if (account_number == int(account_number_user)):
-        #         # Check if account number is correct
-        #         if (user_details[3] == password):
-        #             # Check if password is correct
-        #             # If everything is correct, go to bank operations
-        #          bank_operations(account_number, user_details)
-        #         else:
-        #             # If something is incorrect, break out of the loop and go back to Login
+
         print("Invalid Account Number or Password")
         login()
 
@@ -61,6 +53,7 @@ def login():
 
 def register():
     print("**** Registration ****")
+
     email = input("What is your email address? \n")
     first_name = input("What is your first name? \n")
     last_name = input("What is your last name? \n")
@@ -68,13 +61,13 @@ def register():
     
     account_number = generate_account_number()
     
-    #database[account_number] = [first_name, last_name, email, password, balance]
     # Use the database module to create new user record
     # Create a file in the database
     is_user_created = database.create(account_number, first_name, last_name, email, password)
 
     # Login to account after account has been created
     if is_user_created:
+
         print("Your Account has been created.")
         print(" ======= =============== =======")
         print("Your Account Number is %d" % account_number)
@@ -82,11 +75,12 @@ def register():
         print(" ======= =============== =======")
 
         login()
+
     else:
         print("Something went wrong, please try again.")
         register()
 
-def bank_operations(acc_num, user):
+def bank_operations(user):
     print("Welcome %s %s" % (user[0], user[1]))
 
     try:
@@ -106,7 +100,7 @@ def bank_operations(acc_num, user):
     
     except ValueError:
         print("You must enter a valid option. ")
-        bank_operations(acc_num, user)
+        bank_operations(user)
 
 def withdrawal_operation(acct_number, user_details):
     print("**** Withdrawal ****")

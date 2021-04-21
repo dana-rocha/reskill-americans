@@ -10,6 +10,7 @@
 import random
 import validation
 import database
+from getpass import getpass
 
 
 def init():
@@ -35,19 +36,25 @@ def login():
 
     if is_valid_account_number:
 
-        password = input("What is your password? \n")
+        # Hiding the user's password when typing it in the commandline
+        password = getpass("What is your password? \n")
 
-        for account_number, user_details in database.items():
-            if (account_number == int(account_number_user)):
-                # Check if account number is correct
-                if (user_details[3] == password):
-                    # Check if password is correct
-                    # If everything is correct, go to bank operations
-                 bank_occurrences(account_number, user_details)
-                else:
-                    # If something is incorrect, break out of the loop and go back to Login
-                    print("Invalid Account Number or Password")
-                    login()
+        user = database.authenticate_user(account_number_user, password)
+
+        if user:
+            bank_operations(user)
+        # for account_number, user_details in database.items():
+        #     if (account_number == int(account_number_user)):
+        #         # Check if account number is correct
+        #         if (user_details[3] == password):
+        #             # Check if password is correct
+        #             # If everything is correct, go to bank operations
+        #          bank_operations(account_number, user_details)
+        #         else:
+        #             # If something is incorrect, break out of the loop and go back to Login
+        print("Invalid Account Number or Password")
+        login()
+
     else:
         print("Account Number Invalid: Check that you have up to 10 digits.")
         init()
@@ -57,7 +64,7 @@ def register():
     email = input("What is your email address? \n")
     first_name = input("What is your first name? \n")
     last_name = input("What is your last name? \n")
-    password = input("Create a password. \n")
+    password = getpass("Create a password. \n")
     
     account_number = generate_account_number()
     
@@ -79,7 +86,7 @@ def register():
         print("Something went wrong, please try again.")
         register()
 
-def bank_occurrences(acc_num, user):
+def bank_operations(acc_num, user):
     print("Welcome %s %s" % (user[0], user[1]))
 
     try:
@@ -95,11 +102,11 @@ def bank_occurrences(acc_num, user):
             exit()
         else:
             print("Invalid option selected.")
-            bank_occurrences(acc_num, user)
+            bank_operations(acc_num, user)
     
     except ValueError:
         print("You must enter a valid option. ")
-        bank_occurrences(acc_num, user)
+        bank_operations(acc_num, user)
 
 def withdrawal_operation(acct_number, user_details):
     print("**** Withdrawal ****")
@@ -123,7 +130,7 @@ def withdrawal_operation(acct_number, user_details):
             print("Current Balance: %d" % user_details[4])
         else:
             print("Insufficient funds for withdrawal transaction.")
-            bank_occurrences(acct_number, user_details)
+            bank_operations(acct_number, user_details)
 
     except ValueError:
         print("You must enter a valid number.")

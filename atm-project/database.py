@@ -98,7 +98,7 @@ def does_email_exist(email):
     all_users = os.listdir(user_db_path)
 
     for user in all_users:
-        user_list = (str.split(read(user), ","))
+        user_list = str.split(read(user), ",")
 
         if email in user_list:
             return True
@@ -112,6 +112,17 @@ def does_account_number_exist(account_number):
     for user in all_users:
         if (user == str(account_number) + ".txt"):
             return True
+
+    return False
+
+def authenticate_user(account_number, password):
+
+    if does_account_number_exist(account_number):
+
+        user = str.split(read(account_number), ",")
+
+        if password == user[-1]:
+            return user
 
     return False
 

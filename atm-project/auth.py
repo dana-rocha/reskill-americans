@@ -59,13 +59,9 @@ def register():
     first_name = input("What is your first name? \n")
     last_name = input("What is your last name? \n")
     password = input("Create a password. \n")
-
-    try:
-        accountNumber = generateAccountNumber()
-    except ValueError:
-        print("Account generation failed.")
-        init()
-
+    
+    accountNumber = generateAccountNumber()
+    
     database[accountNumber] = [first_name, last_name, email, password]
 
     # Login to account after account has been created

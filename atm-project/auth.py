@@ -97,14 +97,16 @@ def bank_operations(account_number_user, user):
     print("Welcome %s %s" % (user[0], user[1]))
 
     try:
-        selected_option = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout \n"))
+        selected_option = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout (4) Exit \n"))
     
-        if (selected_option == 1):
+        if selected_option == 1:
             deposit_operation(account_number_user, user)
-        elif(selected_option == 2):
+        elif selected_option == 2:
             withdrawal_operation(account_number_user, user)
-        elif(selected_option == 3):
+        elif selected_option == 3:
             logout(account_number_user)
+        elif selected_option == 4:
+            exit()
         else:
             print("Invalid option selected.")
             bank_operations(account_number_user, user)

@@ -8,6 +8,7 @@ import os
 import validation
 
 user_db_path = "data/user_record/"
+user_login_path = "data/auth_session/"
 
 def create(user_account_number, first_name, last_name, email, password):
     print("Create a New Record")
@@ -156,6 +157,45 @@ def authenticate_user(account_number, password):
             return user
 
     return False
+
+def user_login_timestamp(user_acct, timestamp):
+
+    try:
+        # Create new text file with user's login timestamp
+        filename = open(user_login_path + str(user_acct) + ".txt", "x")
+
+        new_login = "Last user login: " + str(timestamp)
+
+        filename.write(new_login)
+
+    except FileExistsError:
+        # If file already exists, check it it's empty
+        is_file_empty = read(user_login_path + str(user_acct) + ".txt")
+
+        if not is_file_empty:
+            # If the file is empty, rewrite it with the timestamp
+            filename.write(new_login)
+
+    finally: 
+        filename.close()
+        return True 
+
+def delete_user_timestamp(acct_number):
+    # Find the user with account number
+    # Delete the user timestamp record 
+    # Return True
+
+    # Check if the path exists
+    if os.path.exists(user_login_path + str(acct_number) + ".txt"):
+        
+        try:
+            # If the file path exists, remove the file
+            os.remove(user_login_path + str(acct_number) + ".txt")
+            is_delete_successful = True 
+        except FileNotFoundError:
+            print("File not found.")
+        finally:
+            return is_delete_successful
 
 #create(5154511908, ["Dana", "Rocha", "rocha.da@northeastern.edu", "password", 200])
 #delete(1763801065)

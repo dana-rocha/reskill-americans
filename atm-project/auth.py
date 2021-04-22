@@ -10,6 +10,7 @@
 import random
 import validation
 import database
+from datetime import datetime
 from getpass import getpass
 
 
@@ -44,6 +45,11 @@ def login():
         user = database.authenticate_user(account_number_user, password)
 
         if user:
+            # Need to create file in auth_session/ here
+            current_date_time = datetime.now()
+            formatted_date_time = current_date_time.strftime("%m/%d/%y %H:%M:%S")
+            #print("Last login at %s \n" % formatted_date_time) 
+            latest_login = database.user_login_timestamp(account_number_user, formatted_date_time)
             # If the account number and password exist in the database, carry out bank operations
             bank_operations(account_number_user, user)
         else:
@@ -91,17 +97,14 @@ def bank_operations(account_number_user, user):
     print("Welcome %s %s" % (user[0], user[1]))
 
     try:
-        selected_option = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout (4) Exit \n"))
+        selected_option = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout \n"))
     
         if (selected_option == 1):
             deposit_operation(account_number_user, user)
         elif(selected_option == 2):
             withdrawal_operation(account_number_user, user)
         elif(selected_option == 3):
-            logout()
-        elif(selected_option == 4):
-            print("Logging out!")
-            exit()
+            logout(account_number_user)
         else:
             print("Invalid option selected.")
             bank_operations(account_number_user, user)
@@ -186,8 +189,11 @@ def generate_account_number():
 def get_current_balance(user_details):
     return user_details[4]
 
-def logout():
-    login()
+def logout(account_num):
+    user_logout = database.delete_user_timestamp(account_num)
+
+    if user_logout:
+        print("Logging out of bank account!")
 
 #### ACTUAL BANKING SYSTEM ####
 init()

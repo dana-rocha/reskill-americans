@@ -32,7 +32,7 @@ def create(user_account_number, first_name, last_name, email, password):
     
     try:
         # Create a new text file with the account number
-        f = open(user_db_path + str(User_account_number) + ".txt", "x")
+        f = open(user_db_path + str(user_account_number) + ".txt", "x")
 
     except FileExistsError:
         # If this filename already exists, delete the already created file, print out an error, then return False
@@ -86,6 +86,18 @@ def update(user_account_number):
     # Update the contents of the file
     # Save the file
     # Return True
+
+def update_user_balance(account_number, user_details):
+    # Take in new balance
+    # Write to user file, update last index of string/list? in file 
+    file_update = user_db_path + str(account_number) + ".txt"
+    
+    if os.path.exists(file_update):
+        # Update the user's file with the new balance 
+        f = open(file_update, "w")
+        f.write(str(user_details))
+        f.close()
+        return True
 
 def delete(user_account_number):
     print("Delete User Record")

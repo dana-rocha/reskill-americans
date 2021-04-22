@@ -45,10 +45,10 @@ def login():
 
         if user:
             # If the account number and password exist in the database, carry out bank operations
-            bank_operations(user)
-
-        print("Invalid Account Number or Password")
-        login()
+            bank_operations(account_number_user, user)
+        else:
+            print("Invalid Account Number or Password.")
+            login()
 
     else:
         # Account number from user input didn't pass validation
@@ -87,63 +87,98 @@ def register():
         print("Something went wrong, please try again.")
         register()
 
-def bank_operations(user):
+def bank_operations(account_number_user, user):
     print("Welcome %s %s" % (user[0], user[1]))
 
     try:
         selected_option = int(input("What would you like to do? \n(1) Deposit (2) Withdrawl (3) Logout (4) Exit \n"))
     
         if (selected_option == 1):
-            deposit_operation()
+            deposit_operation(account_number_user, user)
         elif(selected_option == 2):
-            withdrawal_operation(user)
+            withdrawal_operation(account_number_user, user)
         elif(selected_option == 3):
             logout()
         elif(selected_option == 4):
+            print("Logging out!")
             exit()
         else:
             print("Invalid option selected.")
-            bank_operations(user)
+            bank_operations(account_number_user, user)
     
     except ValueError:
         print("You must enter a valid option. ")
-        bank_operations(user)
+        bank_operations(account_number_user, user)
 
-def withdrawal_operation(user_details):
+def withdrawal_operation(account_number_user, user_details):
     print("**** Withdrawal ****")
-
     # Get current balance
     # Get widthdrawal amount
     # Check if current balance > withdrawal amount
     # Deduct withdrawal amount from current balance
     # Display current balance
-    currentBalance = user_details[4]
+
+    # User details comes in as a list --> need to convert bank into a comma-separated string
+    current_balance = int(user_details[4])
 
     try:
-        withdrawalAmt = int(input("What amount would you like to withdraw? \n"))
+        withdrawal_amt = int(input("What amount would you like to withdraw? \n"))
 
-        if currentBalance > withdrawalAmt:
-            currentBalance -= withdrawalAmt
-            user_details[4] = currentBalance
+        if current_balance > withdrawal_amt:
+            # Update balance 
+            current_balance -= withdrawal_amt
+            # Convert bank to a comma separated string
+            user_details[4] = str(current_balance)
+            converted_user_details = [str(element) for element in user_details]
+            joined_user_details = ",".join(converted_user_details)
 
-            # Need to actually update the database with the new account balance
+            # Write the updated balance to the file
+            update_user_balance = database.update_user_balance(account_number_user, joined_user_details)
 
-            print("Current Balance: %d" % user_details[4])
+            if update_user_balance:
+                print("Current Balance: %d" % current_balance)
+                bank_operations(account_number_user, user_details)
         else:
             print("Insufficient funds for withdrawal transaction.")
-            bank_operations(user_details)
+            bank_operations(account_number_user, user_details)
 
     except ValueError:
         print("You must enter a valid number.")
-        withdrawal_operation(user_details)
+        withdrawal_operation(account_number_user, user_details)
 
-def deposit_operation():
+def deposit_operation(account_num_user, user_info):
     print("**** Deposit ****")
 
     # Get current balance
     # Get deposit amount
     # Add deposit amount to current balance
     # Display current balance
+
+    # user_info comes in as a list
+    # need to convert bank to a comma-separated string then write to file
+
+    current_acct_balance = int(user_info[4])
+
+    try:
+        deposit_amt = int(input("What amount would you like to deposit?"))
+        # Deposit amount
+        current_acct_balance += deposit_amt
+        # Convert new balance to comma-separated string
+        user_info[4] = str(current_acct_balance)
+        convert_user = [str(ele) for ele in user_info]
+        join_user = ",".join(convert_user)
+
+        # Write the user info with updated balance to the file
+        updated_balance = database.update_user_balance(account_num_user, join_user)
+
+        # Display updated balance to the user
+        if updated_balance:
+            print("Current Balance: %d" % current_acct_balance)
+            bank_operations(account_num_user, user_info)
+
+    except ValueError:
+        print("Please enter a valid number.")
+        deposit_operation(account_num_user, user_info)
 
 def generate_account_number():
     return random.randrange(1111111111, 9999999999)

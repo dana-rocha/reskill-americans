@@ -6,48 +6,56 @@
 
 # Dana Rocha Created 4/29/21
 
-class Budget:
+class Category:
 
     def __init__(self, category, amount):
         self.category = category
         self.amount = amount
 
+
     # methods
-    def deposit(self):
-        try:
-            deposit_input = int(input("What amount would you like to deposit?"))
-            self.amount += deposit_input
-        except TypeError:
-            return("You must enter a valid integer.")
-    
-    def check_balance(self):
-        print("This is the current balance:", self.amount)
-
-    def withdraw(self):
-        try:
-            withdraw_amount = int(input("How much would you like to withdraw?"))
-            if withdraw_amount > self.amount:
-                print("Insufficient funds.")
-            else:
-                self.amount -= withdraw_amount
-                print("Here is your cash.")
-        except TypeError:
-            return("You must enter a valid integer.")
-
-    def transfer(self):
-        try:
-            transfer_amount = int(input("What amount would you like to transfer?"))
-            if transfer_amount > self.amount:
-                print("Insufficient funds!")
-            else:
-                self.amount -= transfer_amount
-                print("Transfer initiated.")
-        except TypeError:
-            return("A valid integer must be entered.")
+    def deposit(self, amount):
+        
+        self.amount += amount
+        return "You have successfully deposited {} in {} Category".format(amount, self.category)
 
 
-food_budget = Budget("Food", 200)
-food_budget.deposit()
-food_budget.check_balance()
-food_budget.withdraw()
-food_budget.check_balance()
+    def budget_balance(self):
+        return "This is the current balance: {}".format(self.amount)
+
+
+    def check_balance(self, amount):
+        # Should return a boolean
+        # Check if amount is less or greater than self.amount
+        if amount <= self.amount:
+            return True
+        else:
+            return False
+
+
+    def withdraw(self, amount):
+
+        if self.check_balance(amount):
+            self.amount -= amount
+            return "You have successfully withdrawn {} from {} Category".format(amount, self.category)
+        else:
+            return "Insufficent funds for withdrawal request."
+
+    def transfer(self, amount, category):
+        # Transfer between two instantiated Categories
+        # try:
+        #     transfer_amount = int(input("What amount would you like to transfer?"))
+        #     if transfer_amount > self.amount:
+        #         print("Insufficient funds!")
+        #     else:
+        #         self.amount -= transfer_amount
+        #         print("Transfer initiated.")
+        # except TypeError:
+        #     return("A valid integer must be entered.")
+        pass
+
+
+food_budget = Category("Food", 200)
+print(food_budget.deposit(50))
+print(food_budget.budget_balance())
+print(food_budget.withdraw(5000))

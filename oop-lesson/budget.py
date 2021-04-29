@@ -17,7 +17,7 @@ class Category:
     def deposit(self, amount):
         
         self.amount += amount
-        return "You have successfully deposited {} in {} Category".format(amount, self.category)
+        return "You have successfully deposited {} in {} Category.".format(amount, self.category)
 
 
     def budget_balance(self):
@@ -26,8 +26,8 @@ class Category:
 
     def check_balance(self, amount):
         # Should return a boolean
-        # Check if amount is less or greater than self.amount
-        if amount <= self.amount:
+        # Check if amount is less than or greater than self.amount
+        if amount >= self.amount:
             return True
         else:
             return False
@@ -36,26 +36,32 @@ class Category:
     def withdraw(self, amount):
 
         if self.check_balance(amount):
-            self.amount -= amount
-            return "You have successfully withdrawn {} from {} Category".format(amount, self.category)
-        else:
             return "Insufficent funds for withdrawal request."
+        else:
+            self.amount -= amount
+            return "You have successfully withdrawn {} from {} Category.".format(amount, self.category)
+
 
     def transfer(self, amount, category):
         # Transfer between two instantiated Categories
-        # try:
-        #     transfer_amount = int(input("What amount would you like to transfer?"))
-        #     if transfer_amount > self.amount:
-        #         print("Insufficient funds!")
-        #     else:
-        #         self.amount -= transfer_amount
-        #         print("Transfer initiated.")
-        # except TypeError:
-        #     return("A valid integer must be entered.")
-        pass
+        if self.check_balance(amount) != True:
+            self.amount -= amount
+            category.amount += amount
+            return "Transfer successful from {} Category to {} Category".format(self.category, category)
+        else:
+            return "Insufficient funds. Transfer cannot be initiated."
 
 
 food_budget = Category("Food", 200)
-print(food_budget.deposit(50))
-print(food_budget.budget_balance())
-print(food_budget.withdraw(5000))
+#print(food_budget.deposit(50))
+#print(food_budget.budget_balance())
+#print(food_budget.withdraw(5000))
+
+car_budget = Category("Car", 5000)
+#print(car_budget.withdraw(30))
+# #print(car_budget.withdraw(1000))
+
+entertainment_budget = Category("Entertainment", 400)
+clothing_budget = Category("Clothing", 200)
+
+print(clothing_budget.transfer(20, entertainment_budget))
